@@ -25,6 +25,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // login tanpa query ulang — tapi cookie ini bisa diubah bebas oleh
         // browser, dan admin/index.php mempercayainya begitu saja.
         setcookie('role', $row['role'], time() + 86400, '/');
+
+        // Kalau baris yang ke-match punya password BEDA dari yang disubmit,
+        // itu bukti query-nya "ditipu" lewat SQL injection (bukan berhasil
+        // login pakai kredensial asli). Dipakai admin/index.php buat kasih
+        // flag studi kasus SQLi secara terpisah dari flag broken-access-nya.
+        if ($row['password'] !== $p) {
+            $_SESSION['sqli_login_bypass'] = true;
+        }
+
         header('Location: index.php');
         exit;
     } elseif (!$error) {

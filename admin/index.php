@@ -19,6 +19,9 @@ $pageTitle = 'Admin Dashboard';
 require __DIR__ . '/../includes/layout_top.php';
 ?>
 <div class="flag-banner"><?= FLAG_BROKEN_ACCESS ?></div>
+<?php if (!empty($_SESSION['sqli_login_bypass'])): ?>
+  <div class="flag-banner"><?= FLAG_SQLI_LOGIN ?></div>
+<?php endif; ?>
 <div class="card">
   <h1>Admin Dashboard</h1>
   <p>Selamat datang di panel admin <?= APP_NAME ?>.</p>
