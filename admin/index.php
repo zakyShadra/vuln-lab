@@ -27,7 +27,7 @@ require __DIR__ . '/../includes/layout_top.php';
   <p>Selamat datang di panel admin <?= APP_NAME ?>.</p>
   <ul>
     <li><a href="/admin/users.php">Kelola Pengguna</a></li>
-    <li><a href="/admin/ping.php">Network Diagnostic Tool</a></li>
+    <li><a href="/admin/view_log.php">Log Viewer</a></li>
     <li><a href="/admin/import_image.php">Import Gambar Produk dari URL</a></li>
   </ul>
 </div>
