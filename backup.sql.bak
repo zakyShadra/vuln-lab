@@ -1,0 +1,11 @@
+-- Backup database NUSANTARA MART
+-- Dibuat otomatis oleh cron backup, seharusnya dihapus dari web root
+-- setelah proses migrasi selesai — tapi kelupaan. Info disclosure klasik:
+-- file cadangan/config yang kelupaan dihapus dari direktori yang bisa
+-- diakses publik.
+--
+-- FLAG{backup_file_exposed_3a77f1}
+
+INSERT INTO users (username, password, role) VALUES ('admin', 'AdminNusantara2024!', 'admin');
+INSERT INTO users (username, password, role) VALUES ('alice', 'alice123', 'user');
+INSERT INTO users (username, password, role) VALUES ('bob', 'bob12345', 'user');
