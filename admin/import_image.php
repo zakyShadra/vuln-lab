@@ -12,9 +12,10 @@ $url = $_POST['url'] ?? '';
 
 if ($url !== '') {
     // VULNERABLE: server melakukan fetch ke URL manapun yang diberikan
-    // admin, tanpa validasi apakah URL itu mengarah ke jaringan internal.
-    // Ini SSRF — server bisa dipaksa mengakses layanan internal yang
-    // seharusnya tidak bisa diakses langsung dari internet.
+    // admin, tanpa validasi skema maupun tujuan sama sekali. Ini SSRF —
+    // dan karena skema-nya juga tidak divalidasi, ini bisa disalahgunakan
+    // lewat skema file:// buat baca file lokal juga, bukan cuma bikin
+    // request HTTP ke jaringan internal.
     $ctx = stream_context_create(['http' => ['timeout' => 5]]);
     $result = @file_get_contents($url, false, $ctx);
     if ($result === false) {
@@ -39,4 +40,5 @@ require __DIR__ . '/../includes/layout_top.php';
     <pre style="background:#111;color:#7ed957;padding:12px;border-radius:6px;overflow-x:auto; white-space:pre-wrap;"><?= htmlspecialchars($result) ?></pre>
   <?php endif; ?>
 </div>
+<!-- TODO: hapus debug ini sebelum production — basepath: <?= __DIR__ ?> -->
 <?php require __DIR__ . '/../includes/layout_bottom.php'; ?>
