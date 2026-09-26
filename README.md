@@ -64,8 +64,8 @@ abis idle), bukan cuma pas redeploy.
 | 4 | IDOR | `order.php?id=` | `FLAG{idor_order_leak_c04f88}` (ada di order #2 milik bob) |
 | 5 | Broken Access Control (client-trusted cookie) | `admin/index.php` | `FLAG{broken_access_control_role_cookie_a91d}` |
 | 6 | Path Traversal / LFI | `admin/view_log.php?file=` | `FLAG{path_traversal_lfi_5d3e70}` (di `secret/db_credentials.txt`, dibaca lewat `../`) |
-| 7 | Unrestricted File Upload → RCE | `profile.php` (upload avatar) | `FLAG{insecure_upload_webshell_rce_6c2a}` (di `config.php`, dibaca lewat webshell) |
-| 8 | SSRF | `admin/import_image.php` → `admin/secret_internal.php` | `FLAG{ssrf_internal_endpoint_reached_e814}` |
+| 7 | Unrestricted File Upload → RCE | `profile.php` (upload avatar) | `FLAG{insecure_upload_webshell_rce_6c2a}` (di `config.php`, dibaca lewat webshell — pakai `file_get_contents()`, **bukan** `system()`/`exec()`, banyak host gratis mematikan itu) |
+| 8 | SSRF (via skema `file://`, bukan cuma `http://`) | `admin/import_image.php` | `FLAG{ssrf_internal_endpoint_reached_e814}` (di `secret/ssrf_internal_note.txt`; absolute path bocor lewat komentar debug di halaman yang sama) |
 | 9 | Business Logic — price tampering | `checkout.php` (hidden field `price`) | `FLAG{price_tampering_checkout_bf209}` |
 | 10 | Information Disclosure — exposed backup | `/backup.sql.bak` | `FLAG{backup_file_exposed_3a77f1}` |
 
@@ -78,3 +78,9 @@ Semua flag juga didefinisikan terpusat di `config.php`.
 - `Dockerfile` + `docker-entrypoint.sh` cuma dipakai kalau deploy ke
   Render/Fly.io/dsb — abaikan kalau upload ke shared hosting biasa.
 - Reset data kapan saja dengan menghapus `data/*.sqlite`.
+- Beberapa free hosting (termasuk domain `.ct.ws` InfinityFree) naruh
+  JS anti-bot challenge di DEPAN SEMUA request ke domainnya, termasuk request
+  dari server ke dirinya sendiri. Kalau nge-test pakai `curl`/script (bukan
+  browser beneran), kamu harus solve challenge itu dulu (biasanya cukup pakai
+  `-A` User-Agent browser asli) supaya gak ke-block; buat exploitasi via
+  browser normal, ini gak kerasa sama sekali.
